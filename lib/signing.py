@@ -25,15 +25,15 @@ def verify_text_file(input_file_name: str, private_key: PrivateKey):
     if start_tag == -1:
         raise SignatureNotFound
     
-    end_tag = content.find("</ds>")
-    if end_tag == -1:
+    end_ds = content.find("</ds>")
+    if end_ds == -1:
         raise SignatureCorrupted
     
     start_ds = start_tag + len("<ds>")
-    end_ds = end_tag + len("</ds>\n")
+    end_tag = end_ds + len("</ds>\n")
 
-    signature = int(content[start_ds:end_tag])
-    real_content = content[end_ds:]
+    signature = int(content[start_ds:end_ds])
+    real_content = content[end_tag:]
     hash = int.from_bytes(SHA3_256.new(real_content.encode()).digest())
     decrypted = private_key.decrypt(signature)
     if decrypted != hash:
