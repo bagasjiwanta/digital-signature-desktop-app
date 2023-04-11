@@ -1,12 +1,43 @@
 from Crypto.Hash import SHA3_256
-from Crypto.Signature import pkcs1_15
-import rsa
+from lib.rsa import PublicKey, PrivateKey
+from lib.exception import SignatureNotFound, SignatureCorrupted, FileModified
 
-def sign_text_file(input_file_name, public_key_file_name):
+
+def sign_text_file(input_file_name:str, output_file_name:str, public_key: PublicKey):
+    '''menambahkan digital signature ke file text'''
     with open(input_file_name, "r") as f:
         content = f.read()
 
-    hash = SHA3_256.new(content.encode()).digest()
+    hash = int.from_bytes(SHA3_256.new(content.encode()).digest())
+    signature = public_key.encrypt(hash)
+    output = "<ds>" + str(signature) + "</ds>\n" + content
 
-    public_key = rsa.read_public_key(public_key_file_name)
+    with open(output_file_name, "w") as f:
+        f.write(output)
+    
 
+def verify_text_file(input_file_name: str, private_key: PrivateKey):
+    '''memeriksa keasilan file text dengan menguji digital signaturenya'''
+    with open(input_file_name, "r") as f:
+        content = f.read()
+    
+    start_tag = content.find("<ds>")
+    if start_tag == -1:
+        raise SignatureNotFound
+    
+    end_tag = content.find("</ds>")
+    if end_tag == -1:
+        raise SignatureCorrupted
+    
+    start_ds = start_tag + len("<ds>")
+    end_ds = end_tag + len("</ds>\n")
+
+    signature = int(content[start_ds:end_tag])
+    real_content = content[end_ds:]
+    hash = int.from_bytes(SHA3_256.new(real_content.encode()).digest())
+    decrypted = private_key.decrypt(signature)
+    if decrypted != hash:
+        raise FileModified
+    return True
+
+    

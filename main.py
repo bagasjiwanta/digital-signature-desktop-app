@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from lib.rsa import generate_rsa, PublicKey, PrivateKey
+from lib.signing import sign_text_file, verify_text_file
+from lib.exception import FileModified, SignatureCorrupted, SignatureNotFound
 import sys
 
 def cek_flow_rsa():
@@ -11,28 +13,19 @@ def cek_flow_rsa():
         private_key.save_to_file('test/private_key.pri')
         public_key.save_to_file('test/public_key.pub')
 
-        print("generated_public_key:", public_key.key)
-        print("generated_private_key:", private_key.key)
-
         # baca key
         private_key = PrivateKey.read_from_file('test/private_key.pri')
         public_key = PublicKey.read_from_file('test/public_key.pub')
 
-        print("public_key:", public_key.key)
-        print("private_key:", private_key.key)
-
-        # encryption
-        message = 69420
-        print(message)
-
-        encrypted = public_key.encrypt(message)
-        decrypted = private_key.decrypt(encrypted)
-
-        print("message:", message)
-        print("encrypted:", encrypted)
-        print("decrypted:", decrypted)
+        sign_text_file('test/message.txt', 'test/output.txt', public_key)
+        is_verified = verify_text_file('test/output.txt', private_key)
+        print(is_verified)
         
-    except Exception as e:
+    except FileModified as e:
+        print(e)
+    except SignatureNotFound as e:
+        print(e)
+    except SignatureCorrupted as e:
         print(e)
 
 cek_flow_rsa()

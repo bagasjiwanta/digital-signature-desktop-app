@@ -29,7 +29,7 @@ def get_shallow_tested_prime(n: int) -> int:
 
 
 def miller_rabin_test(candidate: int) -> bool:
-    '''Menguji prima dengan miller rabin test dengan 10 percobaan dengan kemungkinan non prima sekitar 4^-10'''
+    '''Menguji prima dengan miller rabin test dengan 20 percobaan dengan kemungkinan non prima sekitar 4^-20'''
     maxDivisionsByTwo = 0
     even_component = candidate-1
     while even_component % 2 == 0:
@@ -46,7 +46,7 @@ def miller_rabin_test(candidate: int) -> bool:
         else:
             return True
 
-    trials = 10
+    trials = 20
     for i in range(trials):
         round_tester = random.randrange(2, candidate)
         if trialComposite(round_tester):
@@ -101,7 +101,7 @@ def modular_multiplicative_inverse(A: int, M: int) -> int:
         result = (g_x % M + M) % M
         return result
 
-def generate_large_prime(n: int = 128) -> int:
+def generate_large_prime(n: int) -> int:
     '''Membangkitkan bilangan prima besar sebanyak n bit'''
     while True:
         prime_candidate = get_shallow_tested_prime(n)
@@ -175,9 +175,9 @@ class PublicKey:
 
 def generate_rsa() -> tuple[PrivateKey, PublicKey]:
     '''Membangkitkan objek PrivateKey dan PublicKey'''
-    p = generate_large_prime(64)
-    q = generate_large_prime(64)
-    keys = generate_rsa_keys(p, q, 128)
+    p = generate_large_prime(135)
+    q = generate_large_prime(135)
+    keys = generate_rsa_keys(p, q, 270)
     (n, e, d) = keys
     return (
         PrivateKey(n, d),
