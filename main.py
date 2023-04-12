@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+import sys
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow
+from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtGui import QPixmap
 from lib.rsa import generate_rsa, PublicKey, PrivateKey
 from lib.signing import sign_text_file, verify_text_file
 from lib.exception import FileModified, SignatureCorrupted, SignatureNotFound
-import sys
 
 def cek_flow_rsa():
     try:
@@ -28,10 +31,45 @@ def cek_flow_rsa():
     except SignatureCorrupted as e:
         print(e)
 
-cek_flow_rsa()
+class Menu(QMainWindow):
+    def __init__(self):
+        super(Menu, self).__init__()
+        loadUi("ui/main_menu.ui", self)
+        self.b_rsa.clicked.connect(self.RSA)
+        # self.DigitalSign.clicked.connect(self.Extended)
+        # self.Verif.clicked.connect(self.Playfair)
+        
+    def RSA(self):
+            rsa = RSA()
+            widget.addWidget(rsa)
+            widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+class RSA(QMainWindow):
+    def __init__(self):
+        super(RSA, self).__init__()
+        loadUi("ui/rsa.ui", self)
+        self.generateRSA.clicked.connect(self.GenerateRSA)
+        self.backButton.clicked.connect(self.Menu)
+
+    def GenerateRSA(self):
+        text = self.lineEdit.text()
+        private_key, public_key = generate_rsa()
+        private_key.save_to_file(text + '\private_key.pri')
+        public_key.save_to_file(text + '\public_key.pub')
+        self.label_3.setText("Generated Successfully")
+    def Menu(self):
+        menu = Menu()
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
 
 app = QApplication(sys.argv)
-window = QWidget()
-window.show()
+welcome = Menu()
+widget = QtWidgets.QStackedWidget()
+widget.addWidget(welcome)
+widget.setFixedHeight(700)
+widget.setFixedWidth(900)
+widget.show()
 
 app.exec()
