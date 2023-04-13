@@ -43,7 +43,7 @@
      <string>RSA Key Generator</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="DigitalSign">
+   <widget class="QPushButton" name="b_sign">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -64,7 +64,7 @@
      <string>Digital Sign Generator</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Verif">
+   <widget class="QPushButton" name="b_verif">
     <property name="geometry">
      <rect>
       <x>270</x>
