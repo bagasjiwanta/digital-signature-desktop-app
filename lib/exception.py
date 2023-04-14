@@ -18,6 +18,6 @@ class SignatureCorrupted(Exception):
         super().__init__("Digital signature rusak")
 
 
-class FileModified(Exception):
+class FileOrKeyModified(Exception):
     def __init__(self):
-        super().__init__("File telah dimodifikasi")
+        super().__init__("File atau key telah dimodifikasi")

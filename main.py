@@ -32,7 +32,7 @@ def cek_flow_rsa():
         print(is_verified)
 
         
-    except FileModified as e:
+    except FileOrKeyModified as e:
         print(e)
     except SignatureNotFound as e:
         print(e)
@@ -193,7 +193,7 @@ class Verify (QMainWindow):
             
             if (is_verified):
                 self.label_3.setText('Verified')
-        except FileModified as e:
+        except FileOrKeyModified as e:
             print(e)
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)

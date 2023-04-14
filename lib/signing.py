@@ -1,6 +1,6 @@
 from Crypto.Hash import SHA3_256
 from lib.rsa import PublicKey, PrivateKey
-from lib.exception import SignatureNotFound, SignatureCorrupted, FileModified
+from lib.exception import SignatureNotFound, SignatureCorrupted, FileOrKeyModified
 
 BUFFER_SIZE = 65536
 
@@ -52,7 +52,7 @@ def verify_binary_file(input_file_name: str, key_file_name: str, private_key: Pu
     hash = int.from_bytes(SHA3_256.new(content).digest())
     decrypted = private_key.encrypt(signature)
     if decrypted != hash:
-        raise FileModified
+        raise FileOrKeyModified
     return True
 
 
@@ -77,7 +77,7 @@ def verify_text_file(input_file_name: str, private_key: PublicKey):
     hash = int.from_bytes(SHA3_256.new(real_content.encode()).digest())
     decrypted = private_key.encrypt(signature)
     if decrypted != hash:
-        raise FileModified
+        raise FileOrKeyModified
     return True
 
     
