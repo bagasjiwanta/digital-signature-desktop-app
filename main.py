@@ -174,12 +174,12 @@ class Verify (QMainWindow):
         self.label_4.show()
         self.is_txt = True
     def IsFile (self):
-        self.label_6.hide()
-        self.label_5.hide()
-        self.label_4.hide()
-        self.imporOriginalButton.hide()
-        self.importFileButton.hide()
-        self.impPrivKeyButton.hide()
+        self.label_6.show()
+        self.label_5.show()
+        self.label_4.show()
+        self.imporOriginalButton.show()
+        self.importFileButton.show()
+        self.impPrivKeyButton.show()
         self.is_File = True
         self.label_4.setText("Import Sign File :")
 
