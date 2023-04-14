@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget, QMainWindow
+from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget, QMainWindow, QMessageBox
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap
@@ -7,6 +7,7 @@ from lib.rsa import generate_rsa, PublicKey, PrivateKey
 from lib.signing import sign_text_file, verify_text_file, sign_binary_file, verify_binary_file
 from lib.signing import sign_text_file, verify_text_file
 from lib.exception import *
+import time
 
 def cek_flow_rsa():
     try:
@@ -82,12 +83,12 @@ class RSA(QMainWindow):
 
 class Sign (QMainWindow):
     fileLoc = ''
-    pubKey = ''
+    privKey = ''
     def __init__(self):
         super(Sign, self).__init__()
         loadUi("ui/digital_sign.ui", self)
         self.importFileButton.clicked.connect(self.FileImport)
-        self.impPubKeyButton.clicked.connect(self.PubKeyImport)
+        self.impPrivKeyButton.clicked.connect(self.PrivKeyImport)
         self.generateSign.clicked.connect(self.GenerateSign)
         self.backButton.clicked.connect(self.Menu)
 
@@ -96,17 +97,24 @@ class Sign (QMainWindow):
         self.fileLoc = fname[0]
         self.label_3.setText("File Imported Successfully")
 
-    def PubKeyImport(self):
+    def PrivKeyImport(self):
         try : 
             fname = QFileDialog.getOpenFileName(self, "Choose File", "")
-            self.pubKey = PublicKey.read_from_file(fname[0])
-            self.label_3.setText("Public Key Imported Successfully")
-        except CorruptedPublicKeyFile as e:
-            self.label_3.setText(e)
+            self.privKey = PrivateKey.read_from_file(fname[0])
+            self.label_3.setText("Private Key Imported Successfully")
+        except CorruptedPrivateKeyFile as e:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Verification")
+            msg.setText(str(e))
+            x = msg.exec_() 
 
     def GenerateSign (self):
         loc = self.lineEdit.text()
-        sign_text_file(self.fileLoc, loc +'\output.txt', self.pubKey)
+        if self.radioTxt.isChecked():
+            sign_text_file(self.fileLoc, loc +'\output.txt', self.privKey)
+        else :
+            sign_binary_file(self.fileLoc,loc +'\output.txt', self.privKey )
         self.label_3.setText("Generated Successfully")
 
     def Menu(self):
@@ -116,42 +124,97 @@ class Sign (QMainWindow):
 
 class Verify (QMainWindow):
     fileLoc = ''
-    privKey = ''
+    orgloc = ''
+    pubKey = ''
+    is_txt = False
+    is_File = False
     def __init__(self):
         super(Verify, self).__init__()
         loadUi("ui/verif.ui", self)
         self.importFileButton.clicked.connect(self.FileImport)
-        self.impPrivKeyButton.clicked.connect(self.PrivKeyImport)
+        self.imporOriginalButton.clicked.connect(self.OriginalImport)
+        self.impPrivKeyButton.clicked.connect(self.PubKeyImport)
         self.verifButton.clicked.connect(self.Verification)
         self.backButton.clicked.connect(self.Menu)
+        self.fileTxtButton.clicked.connect(self.IsTxt)
+        self.fileLainButton.clicked.connect(self.IsFile)
+        self.label_6.hide()
+        self.label_5.hide()
+        self.label_4.hide()
+        self.imporOriginalButton.hide()
+        self.importFileButton.hide()
+        self.impPrivKeyButton.hide()
 
     def FileImport(self):
         fname = QFileDialog.getOpenFileName(self, "Choose File", "")
         self.fileLoc = fname[0]
         self.label_3.setText("File Imported Successfully")
     
-    def PrivKeyImport(self):
+    def OriginalImport(self):
+        fname = QFileDialog.getOpenFileName(self, "Choose File", "")
+        self.orgloc = fname[0]
+        self.label_3.setText("Original File Imported Successfully")
+    
+    def PubKeyImport(self):
         try : 
             fname = QFileDialog.getOpenFileName(self, "Choose File", "")
-            self.privKey = PrivateKey.read_from_file(fname[0])
+            self.pubKey = PublicKey.read_from_file(fname[0])
             self.label_3.setText("Public Key Imported Successfully")
-        except CorruptedPrivateKeyFile as e:
-            self.label_3.setText(e)
+        except CorruptedPublicKeyFile as e:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Verification")
+            msg.setText(str(e))
+            x = msg.exec_() 
+
+    def IsTxt (self):
+        self.importFileButton.show()
+        self.impPrivKeyButton.show()
+        self.label_5.show()
+        self.label_4.show()
+        self.is_txt = True
+    def IsFile (self):
+        self.label_6.hide()
+        self.label_5.hide()
+        self.label_4.hide()
+        self.imporOriginalButton.hide()
+        self.importFileButton.hide()
+        self.impPrivKeyButton.hide()
+        self.is_File = True
+        self.label_4.setText("Import Sign File :")
+
     
     def Verification(self):
         try:
-            is_verified = verify_text_file(self.fileLoc, self.privKey)
+            if self.is_txt:
+                is_verified = verify_text_file(self.fileLoc, self.pubKey)
+            else :
+                is_verified = verify_binary_file(self.orgloc ,self.fileLoc, self.pubKey)
+            
             if (is_verified):
                 self.label_3.setText('Verified')
         except FileOrKeyModified as e:
             print(e)
-            self.label_3.setText(e)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Verification")
+            msg.setText(str(e))
+            x = msg.exec_() 
+
         except SignatureNotFound as e:
             print(e)
-            self.label_3.setText(e)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Verification")
+            msg.setText(str(e))
+            x = msg.exec_() 
         except SignatureCorrupted as e:
             print(e)
-            self.label_3.setText(e)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Verification")
+            msg.setText(str(e))
+            x = msg.exec_() 
 
     def Menu(self):
         menu = Menu()

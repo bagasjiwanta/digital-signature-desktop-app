@@ -21,7 +21,7 @@
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>430</y>
+      <y>540</y>
       <width>391</width>
       <height>81</height>
      </rect>
@@ -66,7 +66,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>330</y>
+      <y>440</y>
       <width>441</width>
       <height>41</height>
      </rect>
@@ -111,7 +111,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>190</y>
       <width>361</width>
       <height>41</height>
      </rect>
@@ -134,8 +134,8 @@
    <widget class="QPushButton" name="importFileButton">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>110</y>
+      <x>370</x>
+      <y>190</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -155,8 +155,8 @@
    <widget class="QPushButton" name="impPrivKeyButton">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>190</y>
+      <x>370</x>
+      <y>270</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -177,7 +177,7 @@
     <property name="geometry">
      <rect>
       <x>-20</x>
-      <y>190</y>
+      <y>270</y>
       <width>361</width>
       <height>41</height>
      </rect>
@@ -188,13 +188,100 @@
      </font>
     </property>
     <property name="text">
-     <string>Import Private Key :</string>
+     <string>Import Public Key :</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>-30</x>
+      <y>350</y>
+      <width>361</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Import Original File :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="imporOriginalButton">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>350</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 233, 228);</string>
+    </property>
+    <property name="text">
+     <string>Import</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fileTxtButton">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>90</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 233, 228);</string>
+    </property>
+    <property name="text">
+     <string>File txt</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fileLainButton">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>90</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 233, 228);</string>
+    </property>
+    <property name="text">
+     <string>File lain</string>
     </property>
    </widget>
    <zorder>verifButton</zorder>
@@ -205,6 +292,10 @@
    <zorder>importFileButton</zorder>
    <zorder>label_5</zorder>
    <zorder>impPrivKeyButton</zorder>
+   <zorder>label_6</zorder>
+   <zorder>imporOriginalButton</zorder>
+   <zorder>fileTxtButton</zorder>
+   <zorder>fileLainButton</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
