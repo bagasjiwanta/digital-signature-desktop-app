@@ -4,6 +4,7 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtGui import QPixmap
 from lib.rsa import generate_rsa, PublicKey, PrivateKey
+from lib.signing import sign_text_file, verify_text_file, sign_binary_file, verify_binary_file
 from lib.signing import sign_text_file, verify_text_file
 from lib.exception import *
 
@@ -21,9 +22,14 @@ def cek_flow_rsa():
         public_key = PublicKey.read_from_file('test/public_key.pub')
         print(public_key)
 
-        sign_text_file('test/message.txt', 'test/output.txt', public_key)
-        is_verified = verify_text_file('test/output.txt', private_key)
+        sign_text_file('test/message.txt', 'test/outputtext.txt', public_key)
+        is_verified = verify_text_file('test/outputtext.txt', private_key)
         print(is_verified)
+
+        sign_binary_file('test/message.mp4', 'test/outputbinary.txt', public_key)
+        is_verified = verify_binary_file('test/message.mp4', 'test/outputbinary.txt', private_key)
+        print(is_verified)
+
         
     except FileModified as e:
         print(e)
