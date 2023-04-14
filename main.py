@@ -96,7 +96,7 @@ class Sign (QMainWindow):
             self.pubKey = PublicKey.read_from_file(fname[0])
             self.label_3.setText("Public Key Imported Successfully")
         except CorruptedPublicKeyFile as e:
-            self.label_3.setText(e)
+            self.label_3.setText(str(e))
 
     def GenerateSign (self):
         loc = self.lineEdit.text()
@@ -130,22 +130,23 @@ class Verify (QMainWindow):
             self.privKey = PrivateKey.read_from_file(fname[0])
             self.label_3.setText("Public Key Imported Successfully")
         except CorruptedPrivateKeyFile as e:
-            self.label_3.setText(e)
+            self.label_3.setText(str(e))
     
     def Verification(self):
         try:
+            print('hello')
             is_verified = verify_text_file(self.fileLoc, self.privKey)
             if (is_verified):
                 self.label_3.setText('Verified')
         except FileModified as e:
             print(e)
-            self.label_3.setText(e)
+            self.label_3.setText(str(e))
         except SignatureNotFound as e:
             print(e)
-            self.label_3.setText(e)
+            self.label_3.setText(str(e))
         except SignatureCorrupted as e:
             print(e)
-            self.label_3.setText(e)
+            self.label_3.setText(str(e))
 
     def Menu(self):
         menu = Menu()
