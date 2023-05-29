@@ -4,6 +4,18 @@ Digital signature implementation using self-built RSA and SHA3.
 
 Built using Python (PyQT, Pycryptodome).
 
+To run, clone this repository and then run main.py with Python.
+
+```cmd
+git clone https://github.com/bagasjiwanta/digital-signature-desktop-app.git
+```
+
+use virtual environment and install requirements from `requirements.txt`, and then run.
+
+```cmd
+python main.py
+```
+
 ## RSA Generator
 ![image](https://user-images.githubusercontent.com/68982753/234836547-3aeada30-bfc7-41b9-9469-4c3056de7bb6.png)
 
